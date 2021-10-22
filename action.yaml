@@ -1,0 +1,42 @@
+name: 'Luacheck for lua codebases'
+author: Michael Wiesendanger<michael.wiesendanger@gmail.com>
+description: 'Runs luacheck on a codebase or specific files'
+branding:
+  icon: check-square
+  color: purple
+inputs:
+  files:
+    description: >
+      A list of files or directories to apply luacheck to.
+      Defaults to the working directory from `path`.
+    required: false
+    default: '.'
+  workspace:
+    description: >
+      Working directory for luacheck. The file list should be relative to this path.
+      Defaults to the `github.workspace` path.
+    required: false
+    default: ${{ github.workspace }}
+  args:
+    description: >
+      Additional command-line arguments.
+      See https://luacheck.readthedocs.io/en/stable/cli.html
+    required: false
+runs:
+  using: composite
+  steps:
+    - run: |
+        echo "Install luacheck"
+        if ! hash luacheck &>/dev/null; then
+          sudo apt-get update -y || exit 1
+          sudo apt-get install -yq luarocks 1>/dev/null || exit 1
+          sudo luarocks install luacheck 1>/dev/null || exit 1
+          sudo luarocks install lanes &>/dev/null || true
+        fi
+        echo "luacheck --version"
+        luacheck --version
+      shell: bash
+    - run: |
+        luacheck ${{ inputs.args }} -- ${{ inputs.files }}
+      working-directory: ${{ inputs.workspace }}
+      shell: bash
