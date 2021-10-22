@@ -2,8 +2,7 @@
 
 > A github action that uses luacheck to lint full codebases or specific files
 
-<img src="/docs/github_actions.svg" width="150"/>
-<img src="/docs/lua_logo.svg" width="200"/>
+![](/docs/github_luacheck_action.png)
 
 # How to use
 
