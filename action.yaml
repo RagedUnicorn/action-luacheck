@@ -8,35 +8,18 @@ inputs:
   files:
     description: >
       A list of files or directories to apply luacheck to.
-      Defaults to the working directory from `path`.
+      Paths are resolved relative to the repository root.
     required: false
     default: '.'
-  workspace:
-    description: >
-      Working directory for luacheck. The file list should be relative to this path.
-      Defaults to the `github.workspace` path.
-    required: false
-    default: ${{ github.workspace }}
   args:
     description: >
       Additional command-line arguments.
       See https://luacheck.readthedocs.io/en/stable/cli.html
     required: false
 runs:
-  using: composite
-  steps:
-    - run: |
-        echo "Install luacheck"
-        if ! hash luacheck &>/dev/null; then
-          sudo apt-get update -y || exit 1
-          sudo apt-get install -yq luarocks 1>/dev/null || exit 1
-          sudo luarocks install luacheck 1>/dev/null || exit 1
-          sudo luarocks install lanes &>/dev/null || true
-        fi
-        echo "luacheck --version"
-        luacheck --version
-      shell: bash
-    - run: |
-        luacheck ${{ inputs.args }} -- ${{ inputs.files }}
-      working-directory: ${{ inputs.workspace }}
-      shell: bash
+  using: 'docker'
+  image: 'docker://ghcr.io/ragedunicorn/docker-luacheck:v1.2.0-alpine3.23.4-2'
+  entrypoint: sh
+  args:
+    - -c
+    - luacheck ${{ inputs.args }} -- ${{ inputs.files }}

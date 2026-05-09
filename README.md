@@ -4,6 +4,10 @@
 
 <img src="/docs/github_luacheck_action.png" width="150"/>
 
+This action runs as a Docker container using
+[ragedunicorn/docker-luacheck](https://github.com/RagedUnicorn/docker-luacheck) and therefore only
+runs on Linux runners (`ubuntu-*`).
+
 # How to use
 
 #### Basic usage
@@ -40,6 +44,13 @@ jobs:
             files: code/
             args: -q
 ```
+
+# Inputs
+
+| Name    | Required | Default | Description                                                                                                          |
+|---------|----------|---------|----------------------------------------------------------------------------------------------------------------------|
+| `files` | no       | `.`     | List of files or directories to lint, resolved relative to the repository root.                                      |
+| `args`  | no       | _empty_ | Extra command-line arguments forwarded to luacheck. See the [luacheck CLI docs](https://luacheck.readthedocs.io/en/stable/cli.html). |
 
 # License
 
