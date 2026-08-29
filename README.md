@@ -1,5 +1,7 @@
 # action-luacheck
 
+![action-luacheck](docs/action_luacheck_banner.svg)
+
 > A GitHub action that uses luacheck to lint full codebases or specific files
 
 <img src="/docs/github_luacheck_action.png" width="150"/>
